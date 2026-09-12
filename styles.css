@@ -2,3 +2,6 @@
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}.reveal.visible{opacity:1;transform:none}
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}.reveal.visible{opacity:1;transform:none}
 @media(max-width:720px){.mobile-menu{display:flex}}
+
+/* Native checkbox rendering keeps the consent control tappable and visibly checked on iOS. */
+.consent{cursor:pointer;user-select:none}.consent input[type="checkbox"]{-webkit-appearance:checkbox;appearance:auto;accent-color:var(--olive-dark);width:24px;height:24px;min-width:24px;flex:none;margin:0;padding:0;cursor:pointer}.consent input[type="checkbox"]:focus-visible{outline:3px solid #c7d19e;outline-offset:2px}
