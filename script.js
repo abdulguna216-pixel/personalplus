@@ -1,15 +1,3 @@
-// Single configuration surface for business figures; replace these values with CMS/API data when connected.
-const siteConfig = { counters: { onShift: 47, filled: 94 } };
-
-document.querySelectorAll('[data-count]').forEach((el) => {
-  const finalValue = el.dataset.count === '47' ? siteConfig.counters.onShift : siteConfig.counters.filled;
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce) { el.textContent = finalValue; return; }
-  const start = performance.now(), duration = 900;
-  const animate = (now) => { const p = Math.min((now - start) / duration, 1); el.textContent = Math.round(finalValue * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(animate); };
-  requestAnimationFrame(animate);
-});
-
 const header = document.querySelector('.header');
 addEventListener('scroll', () => header.classList.toggle('scrolled', scrollY > 8), { passive: true });
 
