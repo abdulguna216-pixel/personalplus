@@ -10,9 +10,10 @@ menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMen
 const revealObserver = new IntersectionObserver((entries) => entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); } }), { threshold: .12 });
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-document.querySelectorAll('.service-button').forEach((button) => {
+document.querySelectorAll('button[aria-haspopup="dialog"][aria-controls]').forEach((button) => {
   const dialog = document.getElementById(button.getAttribute('aria-controls'));
   button.addEventListener('click', () => dialog.showModal());
+  dialog.addEventListener('close', () => button.focus({ preventScroll: true }));
   dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', (event) => {
     if (event.target === dialog) dialog.close();
