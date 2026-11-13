@@ -10,35 +10,11 @@ menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMen
 const revealObserver = new IntersectionObserver((entries) => entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); } }), { threshold: .12 });
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-const form = document.querySelector('#request-form');
-const status = form.querySelector('.form-status');
-form.phone.addEventListener('input', (e) => {
-  let digits = e.target.value.replace(/\D/g, '').replace(/^8/, '7').slice(0, 11); if (digits && digits[0] !== '7') digits = '7' + digits;
-  const p = digits.slice(1); e.target.value = !digits ? '' : '+7' + (p ? ' (' + p.slice(0, 3) : '') + (p.length > 3 ? ') ' + p.slice(3, 6) : '') + (p.length > 6 ? '-' + p.slice(6, 8) : '') + (p.length > 8 ? '-' + p.slice(8, 10) : '');
-});
-form.addEventListener('submit', async (event) => {
-  event.preventDefault(); status.textContent = '';
-  if (!form.checkValidity() || form.phone.value.replace(/\D/g, '').length < 11) { status.textContent = 'Пожалуйста, заполните обязательные поля и укажите корректный телефон.'; status.style.color = '#ffe0d4'; form.reportValidity(); return; }
-  const submit = form.querySelector('[type=submit]'); submit.disabled = true; submit.textContent = 'Отправляем…';
-  const data = Object.fromEntries(new FormData(form).entries());
-
-  try {
-    const response = await fetch('/api/lead', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    const result = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(result.error || 'Не удалось отправить заявку.');
-
-    status.textContent = 'Спасибо! Заявка отправлена. Менеджер свяжется с вами.';
-    status.style.color = '#fff';
-    form.reset();
-  } catch (error) {
-    status.textContent = error.message || 'Не удалось отправить заявку. Попробуйте ещё раз.';
-    status.style.color = '#ffe0d4';
-  } finally {
-    submit.disabled = false;
-    submit.innerHTML = 'Получить расчёт <b>→</b>';
-  }
+document.querySelectorAll('.service-button').forEach((button) => {
+  const dialog = document.getElementById(button.getAttribute('aria-controls'));
+  button.addEventListener('click', () => dialog.showModal());
+  dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close();
+  });
 });
